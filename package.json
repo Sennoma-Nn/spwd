@@ -1,0 +1,15 @@
+{
+    "name": "spwd",
+    "version": "1.0.0",
+    "description": "A tool to display the current working directory in a formatted way",
+    "bin": {
+        "spwd": "./spwd.js"
+    },
+    "scripts": {
+        "start": "node spwd.js"
+    },
+    "dependencies": {},
+    "engines": {
+        "node": ">=12.0.0"
+    }
+}
