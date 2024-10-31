@@ -66,7 +66,16 @@ if (config.abbr.homeDir.enable === 'yes') {
     pwd = replaceStart(pwd, homeDir, config.abbr.homeDir.flag);
 }
 
-const sp_pwd = pwd.split(config.splitChar.input).filter(i => i !== "");
+let sp_pwd = pwd.split(config.splitChar.input)
+if (pwd !== '/') {
+    if (sp_pwd.length > 0 && sp_pwd[sp_pwd.length - 1] === '') {
+        sp_pwd.pop();
+    }
+    if (config.rootDirFlag.enable === 'yes') {
+        if (sp_pwd[0] === "") sp_pwd.shift();
+    }
+}
+
 let out = '';
 if (pwd[0] === '/' && config.rootDirFlag.enable === 'yes') {
     out = config.color.fileOrDir + config.rootDirFlag.flag;
