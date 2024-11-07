@@ -1,6 +1,6 @@
 {
     "name": "spwd",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "A tool to display the current working directory in a formatted way",
     "main": "spwd.js",
     "bin": {
@@ -25,7 +25,6 @@
         "url": "https://github.com/Sennoma-Nn/spwd/issues"
     },
     "homepage": "https://github.com/Sennoma-Nn/spwd#readme",
-    "dependencies": {},
     "engines": {
         "node": ">=12.0.0"
     }

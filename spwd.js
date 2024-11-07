@@ -27,6 +27,11 @@ const defaultConfig = {
             length: 1,
             fullDirs: 2
         }
+    },
+    specialFormat: {
+        enable: 'no',
+        start: '',
+        end: ''
     }
 };
 
@@ -55,6 +60,13 @@ const replaceStart = (str, old, re) => {
     return str;
 };
 
+const isEnable = (enable, isTrue, isFalse) => {
+    if (isTrue !== undefined) {
+        return enable === 'yes' ? isTrue || '' : isFalse || '';
+    }
+    return enable === 'yes';
+}
+
 let pwd = process.argv.slice(2)[0] || process.env.PWD;
 
 let homeDir = config.abbr.homeDir.path;
@@ -62,7 +74,7 @@ if (homeDir === '$HOME') {
     homeDir = process.env.HOME;
 }
 
-if (config.abbr.homeDir.enable === 'yes') {
+if (isEnable(config.abbr.homeDir.enable)) {
     pwd = replaceStart(pwd, homeDir, config.abbr.homeDir.flag);
 }
 
@@ -71,13 +83,13 @@ if (pwd !== '/') {
     if (sp_pwd.length > 0 && sp_pwd[sp_pwd.length - 1] === '') {
         sp_pwd.pop();
     }
-    if (config.rootDirFlag.enable === 'yes') {
+    if (isEnable(config.rootDirFlag.enable)) {
         if (sp_pwd[0] === "") sp_pwd.shift();
     }
 }
 
 let out = '';
-if (pwd[0] === '/' && config.rootDirFlag.enable === 'yes') {
+if (pwd[0] === '/' && isEnable(config.rootDirFlag.enable)) {
     out = config.color.fileOrDir + config.rootDirFlag.flag;
 }
 
@@ -90,13 +102,18 @@ for (let i = 0; i < sp_pwd.length; i++) {
     }
 
     out += reset;
-    if (config.abbr.dir.enable === 'yes' && i < sp_pwd.length - config.abbr.dir.fullDirs) {
+    if (isEnable(config.abbr.dir.enable) && i < sp_pwd.length - config.abbr.dir.fullDirs) {
+        let len = config.abbr.dir.length;
         out += config.color.abbr;
-        out += dir.slice(0, config.abbr.dir.length);
+        out += dir.slice(0, Number(dir[0] === '.') + len);
     } else {
         out += config.color.fileOrDir;
         out += dir;
     }
 }
 
-process.stdout.write(out + reset);
+out = (isEnable(config.specialFormat.enable, config.specialFormat.start))
+    + out
+    + reset
+    + (isEnable(config.specialFormat.enable, config.specialFormat.end));
+process.stdout.write(out);
